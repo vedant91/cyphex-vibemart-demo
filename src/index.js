@@ -22,6 +22,8 @@ const PORT = process.env.PORT || 3003;
 app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/api/orders', require('./routes/orders'));
+
 
 // VULN (CWE-16): Verbose headers leak tech stack
 app.use((req, res, next) => {
