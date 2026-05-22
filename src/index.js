@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 app.use('/api/products', require('./routes/products'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/admin', require('./routes/admin'));
-app.use('/api/payments', require('./routes/payments'));
+// app.use('/api/payments', require('./routes/payments'));
 
 // Health check — VULN (CWE-200): Leaks server internals
 app.get('/api/health', (req, res) => {

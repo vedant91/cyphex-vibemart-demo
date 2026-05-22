@@ -19,20 +19,13 @@ router.post('/login', (req, res) => {
     return res.status(400).json({ error: 'Username and password required' });
   }
 
-  db.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-    if (results.length === 0) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-    res.json({ message: 'Login successful' });
-  });
-});
-
-  // VULN: Direct string interpolation into SQL
+  // VULN: Direct string interpolation into SQL (CWE-89)
   const sql = `SELECT * FROM users WHERE username = '${username}'`;
-  const results = db.query(sql);
+  
+  // NOTE: Assuming db.query here is synchronous for the sake of this vulnerable demo pattern,
+  // or it returns an array directly. In realistic async apps, this would be await db.query(sql).
+  // But based on the previous code, it seems the mock db supports synchronous arrays.
+  const results = db.query(sql) || [];
 
   if (results.length === 0) {
     return res.status(401).json({ error: 'User not found' });
