@@ -58,10 +58,9 @@ router.get('/receipt', (req, res) => {
 // GET /api/orders/lookup?email=user@test.com
 // VULN (CWE-943): NoSQL/SQL Injection — email used in query without sanitization
 router.get('/lookup', (req, res) => {
-  const email = req.query.email;
-  const sql = `SELECT * FROM orders WHERE user_email = '${email}'`;
-  const results = db.query(sql);
-  res.json({ orders: results, query_used: sql }); // VULN: exposes internal query
-});
+const email = req.query.email;
+const sql = 'SELECT * FROM orders WHERE user_email = ?';
+const results = db.query(sql, [email]);
+res.json({ orders: results, query_used: sql });
 
 module.exports = router;

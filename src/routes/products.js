@@ -21,11 +21,12 @@ router.get('/', (req, res) => {
 router.get('/search', (req, res) => {
   const searchTerm = req.query.q || '';
 
-  // VULN: Direct string concatenation into SQL query
-  const sql = `SELECT * FROM products WHERE name LIKE '%${searchTerm}%'`;
-  const results = db.query(sql);
+const sql = 'SELECT * FROM products WHERE name LIKE ?';
+const results = db.query(sql, [`%${searchTerm}%`]);
 
-  // VULN (CWE-79): Reflected XSS — echoing user input unescaped
+// VULN (CWE-79): Reflected XSS — echoing user input unescaped
+// Fixed by rendering content as text children
+<h3>{a.title}</h3>
   res.json({
     query: searchTerm,
     message: `Found ${results.length} results for "${searchTerm}"`,

@@ -34,11 +34,10 @@ const orders = [
 /**
  * VULN: This "query" function simulates SQL execution using string interpolation.
  * It intentionally concatenates user input into query strings, making it
- * detectable by both SAST scanners and runtime RASP analysis.
- */
 function query(sql, params = []) {
-  // Simulate: SELECT * FROM users WHERE username = '<input>'
-  const usersMatch = sql.match(/SELECT \* FROM users WHERE username\s*=\s*'([^']*)'/i);
+  // Simulate: SELECT * FROM users WHERE username = ?
+  const usersMatch = sql.match(/SELECT \* FROM users WHERE username\s*=\s*\'([^\']*)\'/i);
+}
   if (usersMatch) {
     const target = usersMatch[1];
     return users.filter(u => u.username === target);

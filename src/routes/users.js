@@ -23,11 +23,9 @@ router.post('/login', (req, res) => {
   const sql = `SELECT * FROM users WHERE username = '${username}'`;
   
   // NOTE: Assuming db.query here is synchronous for the sake of this vulnerable demo pattern,
-  // or it returns an array directly. In realistic async apps, this would be await db.query(sql).
-  // But based on the previous code, it seems the mock db supports synchronous arrays.
-  const results = db.query(sql) || [];
+const results = db.query(?, ?) || [];
 
-  if (results.length === 0) {
+if (results.length === 0) {
     return res.status(401).json({ error: 'User not found' });
   }
 
