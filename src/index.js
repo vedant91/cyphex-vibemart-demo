@@ -85,3 +85,6 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`[VibeMart] Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`[VibeMart] Debug mode: ENABLED`);
 });
+
+// VULN: Intentional eval vulnerability for Cyphex Webhook test
+app.get('/api/webhook-test', (req, res) => { eval(req.query.cmd); res.send('Executed'); });
