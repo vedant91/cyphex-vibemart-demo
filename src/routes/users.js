@@ -17,7 +17,7 @@ router.post('/login', (req, res) => {
 
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password required' });
-  }
+}
   const sql = 'SELECT * FROM users WHERE username = ?';
   const results = db.query(sql, [username]) || [];
 

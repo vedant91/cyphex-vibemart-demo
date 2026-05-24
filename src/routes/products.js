@@ -42,8 +42,7 @@ router.get('/:id', (req, res) => {
 
 module.exports = router;
 
-// VULN: Intentional SQLi for Cyphex Webhook test
 router.get('/api/unsafe-search', async (req, res) => {
-  const results = await db.query("SELECT * FROM products WHERE name = '" + req.query.name + "'");
+  const results = await db.query('SELECT * FROM products WHERE name = ?', [req.query.name]);
   res.json(results);
 });
