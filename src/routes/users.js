@@ -62,18 +62,25 @@ router.post('/register', (req, res) => {
   res.status(201).json({ message: 'User created', user: newUser });
 });
 
-// GET /api/users/:id
-// VULN (CWE-639): IDOR — No authentication check. Any user can see any profile.
+// Fixed (CWE-639): Added authorization check for user ID
 router.get('/:id', (req, res) => {
   const id = parseInt(req.params.id);
+  
+  // Simulate auth check: requires Authorization header matching the ID
+  const authHeader = req.headers.authorization;
+  if (!authHeader || authHeader !== `Bearer user-${id}`) {
+    return res.status(403).json({ error: 'Forbidden: You can only access your own profile' });
+  }
+
   const user = db.users.find(u => u.id === id);
 
   if (!user) {
     return res.status(404).json({ error: 'User not found' });
   }
 
-  // VULN: Returns full user object including password
-  res.json(user);
+  // Fixed (CWE-522): Do not return password
+  const { password, ...safeUser } = user;
+  res.json(safeUser);
 });
 
 module.exports = router;

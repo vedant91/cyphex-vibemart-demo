@@ -18,8 +18,18 @@ const PORT = process.env.PORT || 3003;
 
 // ── Middleware ──
 
-// VULN (CWE-942): Wildcard CORS — allows requests from any domain
-app.use(cors({ origin: '*', credentials: true }));
+// Fixed (CWE-942): CORS restricts origins to local dev and production
+const allowedOrigins = ['http://localhost:3000', 'https://vibemart.local'];
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/orders', require('./routes/orders'));
