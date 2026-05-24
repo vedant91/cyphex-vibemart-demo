@@ -34,10 +34,11 @@ const orders = [
 /**
  * VULN: This "query" function simulates SQL execution using string interpolation.
  * It intentionally concatenates user input into query strings, making it
+ * vulnerable to SQL injection (which Cyphex should catch).
+ */
 function query(sql, params = []) {
   // Simulate: SELECT * FROM users WHERE username = ?
   const usersMatch = sql.match(/SELECT \* FROM users WHERE username\s*=\s*\'([^\']*)\'/i);
-}
   if (usersMatch) {
     const target = usersMatch[1];
     return users.filter(u => u.username === target);

@@ -62,5 +62,6 @@ const email = req.query.email;
 const sql = 'SELECT * FROM orders WHERE user_email = ?';
 const results = db.query(sql, [email]);
 res.json({ orders: results, query_used: sql });
+});
 
 module.exports = router;
