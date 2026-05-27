@@ -15,11 +15,14 @@ const db = require('../db');
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ error: 'Username and password required' });
-}  const sql = 'SELECT * FROM users WHERE username = ?';  const results = db.query(sql, [username]) || []; if (results.length === 0) {
-    return res.status(401).json({ error: 'User not found' });
-  }
+if (!username || !password) {
+  return res.status(400).json({ error: 'Username and password required' });
+}
+const sql = 'SELECT * FROM users WHERE username = ?';
+const results = db.query(sql, [username]) || [];
+if (results.length === 0) {
+  return res.status(401).json({ error: 'User not found' });
+}
 
   const user = results[0];
   if (user.password !== password) {
